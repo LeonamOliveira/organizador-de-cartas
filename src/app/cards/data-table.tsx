@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { FaPen, FaTrashCan } from "react-icons/fa6";
 import { Card, CardGame } from './card.interface';
-import { DialogEdit, DialogConfirm } from './dialog';
+import { DialogEdit, DialogConfirm, DialogCadastrar } from './dialog';
 
 export function DataTable() {
     const [cards, setCards] = useState<Card[]>([{
@@ -37,6 +37,17 @@ export function DataTable() {
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
     const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
+    const [isCadastrarDialogOpen, setIsCadastrarDialogOpen] = useState(false);
+
+    const handleCadastrarCard = (quantidade: number, nome: string, cardgame: CardGame) => {
+        const newCard: Card = {
+            quantidade,
+            nome, 
+            cardgame
+        }
+        setCards([...cards, {...newCard}])
+        setIsCadastrarDialogOpen(false)
+    }
 
     const handleEditCard = (cardId: number, newQuantity: number, newName: string, newCardgame: CardGame) => {
         console.log('Entrei')
@@ -82,6 +93,7 @@ export function DataTable() {
     }
     return (
         <>
+            <Button style={{backgroundColor:'green', color: 'white'}} onClick={() => setIsCadastrarDialogOpen(true)}>Cadastrar</Button>
             <Table>
                 <TableCaption>Lista de cartas</TableCaption>
                 <TableHeader>
@@ -147,6 +159,12 @@ export function DataTable() {
                         <p>Deseja excluir a carta "{selectedCard.nome} com quantidade {selectedCard.quantidade}?"</p>
                     </DialogConfirm>
                 )}
+                <DialogCadastrar 
+                    title='Cadastrar Carta'
+                    isOpen={isCadastrarDialogOpen}
+                    onClose={() => setIsCadastrarDialogOpen(false)}
+                    onSubmit={handleCadastrarCard}
+                />
         </>
     )
 }

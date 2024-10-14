@@ -1,6 +1,6 @@
 import { CardGame } from "./card.interface";
 
-export interface DialogEditProps {
+export interface IDialogEditProps {
   title: string;
   isOpen: boolean;
   onClose: () => void;
@@ -11,4 +11,21 @@ export interface DialogEditProps {
   };
   onSubmit: (quantidade: number, nome: string, cardgame: CardGame) => void;
   children?: React.ReactNode;
+}
+
+export interface IDialogCadastrar {
+  title: string,
+  isOpen: boolean,
+  onClose: () => void;
+  onSubmit: (quantidade: number, nome: string, cardgame: CardGame) => void;
+  children?: React.ReactNode;
+}
+
+
+export interface IDialogConfirmEdit {
+  title: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  children: React.ReactNode;
 }
