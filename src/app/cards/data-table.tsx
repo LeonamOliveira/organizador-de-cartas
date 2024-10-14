@@ -12,7 +12,7 @@ import {
 } from '@/components/ui/table'
 import { FaPen, FaTrashCan } from "react-icons/fa6";
 import { Card, CardGame } from './card.interface';
-import { DialogEdit } from './dialog';
+import { DialogEdit, DialogConfirm } from './dialog';
 
 export function DataTable() {
     const [cards, setCards] = useState<Card[]>([{
@@ -36,6 +36,7 @@ export function DataTable() {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [selectedCard, setSelectedCard] = useState<Card | null>(null);
+    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
 
     const handleEditCard = (cardId: number, newQuantity: number, newName: string, newCardgame: CardGame) => {
         console.log('Entrei')
@@ -49,6 +50,11 @@ export function DataTable() {
         setIsDialogOpen(false);
     }
 
+    const handleDeleteCard = (cardId: number) => {
+        setCards(cards.filter(card => card.id !== cardId))
+        closeConfirmDialog()
+    }
+
     const openEditDialog = (card: Card) => {
         setSelectedCard(card);
         setIsDialogOpen(true)
@@ -56,6 +62,16 @@ export function DataTable() {
 
     const closeDialog = () => {
         setIsDialogOpen(false);
+        setSelectedCard(null);
+    }
+
+    const openConfirmDialog = (card: Card) => {
+        setSelectedCard(card);
+        setIsConfirmDialogOpen(true);
+    }
+
+    const closeConfirmDialog = () => {
+        setIsConfirmDialogOpen(false);
         setSelectedCard(null);
     }
 
@@ -94,7 +110,8 @@ export function DataTable() {
                                             </Button>
                                             <Button
                                                 variant='ghost'
-                                                size='icon'>
+                                                size='icon'
+                                                onClick={() => openConfirmDialog(card)}>
                                                     <FaTrashCan />
                                             </Button>
                                         </div>
@@ -119,6 +136,16 @@ export function DataTable() {
                         card={selectedCard}
                         onSubmit={handleDialogSubmit}
                     />
+                )}
+                {selectedCard && (
+                    <DialogConfirm
+                        title='Excluir Carta'
+                        isOpen={isConfirmDialogOpen}
+                        onClose={closeConfirmDialog}
+                        onConfirm={() => handleDeleteCard(selectedCard.id)}
+                    >
+                        <p>Deseja excluir a carta "{selectedCard.nome} com quantidade {selectedCard.quantidade}?"</p>
+                    </DialogConfirm>
                 )}
         </>
     )

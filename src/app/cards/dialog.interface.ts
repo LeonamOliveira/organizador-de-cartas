@@ -10,4 +10,5 @@ export interface DialogEditProps {
     cardgame: CardGame
   };
   onSubmit: (quantidade: number, nome: string, cardgame: CardGame) => void;
+  children?: React.ReactNode;
 }

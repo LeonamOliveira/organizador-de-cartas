@@ -13,9 +13,9 @@ import { useState } from 'react';
 import { CardGame } from './card.interface';
 
 export function DialogEdit({ title, isOpen, onClose, card, onSubmit}: DialogEditProps) {
-  const [quantidade, setQuantidade] = useState(card.quantidade);
-  const [nome, setNome] = useState(card.nome);
-  const [cardgame, setCardGame] = useState(card.cardgame);
+  const [quantidade, setQuantidade] = useState(card?.quantidade);
+  const [nome, setNome] = useState(card?.nome);
+  const [cardgame, setCardGame] = useState(card?.cardgame);
 
   const handleSubmit = () => {
     onSubmit(quantidade, nome, cardgame);
@@ -42,15 +42,45 @@ export function DialogEdit({ title, isOpen, onClose, card, onSubmit}: DialogEdit
             value={nome}
             onChange={(e) => setNome(e.target.value)}
           />
-          <Label htmlFor='cardgame'>CardGame</Label> // Dropdown =>
+          <Label htmlFor='cardgame'>CardGame</Label>
           <Input 
             id='cardgame'
             value={cardgame}
             onChange={(e) => setCardGame(e.target.value as CardGame)}
             />
         </div>
-        <Button onClick={handleSubmit}>Salvar</Button>
+        <Button style={{backgroundColor: 'green', color: 'white'}} onClick={handleSubmit}>Salvar</Button>
       </DialogContent>
     </Dialog>
+  )
+}
+
+interface DialogConfirmProps {
+  title: string;
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  children: React.ReactNode;
+}
+
+export const DialogConfirm: React.FC<DialogConfirmProps> = ({
+  title,
+  isOpen,
+  onClose,
+  onConfirm,
+  children
+}) => {
+  if(!isOpen) return null;
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+    <DialogContent className='sm:max-w-[425px]'>
+      <DialogHeader>
+        <DialogTitle>{title}</DialogTitle>
+      </DialogHeader>      
+        <Button variant="destructive" onClick={onConfirm}>Excluir</Button>
+        <Button onClick={onClose}>Cancelar</Button>
+    </DialogContent>
+  </Dialog>
   )
 }
