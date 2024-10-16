@@ -157,7 +157,7 @@ export function DataTable() {
                         onClose={closeConfirmDialog}
                         onConfirm={() => handleDeleteCard(selectedCard.id)}
                     >
-                        <p>Deseja excluir a carta "{selectedCard.nome} com quantidade {selectedCard.quantidade}?"</p>
+                        <p>Deseja excluir a carta {selectedCard.nome} com quantidade {selectedCard.quantidade}?</p>
                     </DialogConfirm>
                 )}
                 <DialogCadastrar 
