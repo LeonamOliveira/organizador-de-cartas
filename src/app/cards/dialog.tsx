@@ -7,9 +7,9 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { IDialogConfirmEdit, IDialogEditProps, IDialogCadastrar } from './dialog.interface';
-import { useEffect, useState } from 'react';
-import { CardGame } from './card.interface';
+import { IDialogConfirmEdit, IDialogEditProps, IDialogCadastrar } from './interface/dialog.interface';
+import { useState } from 'react';
+import { CardGame } from './interface/card.interface';
 
 import {
   DropdownMenu,
@@ -20,11 +20,10 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
 export function DialogEdit({ title, isOpen, onClose, card, onSubmit}: IDialogEditProps) {
-  const [quantidade, setQuantidade] = useState(card?.quantidade);
-  const [nome, setNome] = useState(card?.nome);
-  const [cardgame, setCardGame] = useState(card?.cardgame);
+  const [quantidade, setQuantidade] = useState(card?.quantidade || 0);
+  const [nome, setNome] = useState(card?.nome || '');
+  const [cardgame, setCardGame] = useState(card?.cardgame || CardGame.YuGiOh);
 
   const handleSubmit = () => {
     onSubmit(quantidade, nome, cardgame);
@@ -82,8 +81,6 @@ export const DialogConfirm: React.FC<IDialogConfirmEdit> = ({
   )
 }
 
-
-
 export const DialogCadastrar: React.FC<IDialogCadastrar> = ({ title, isOpen, onClose, onSubmit}) => {
   const [quantidade, setQuantidade] = useState(1);
   const [nome, setNome] = useState('');
@@ -119,10 +116,11 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({ title, isOpen, onC
             onChange={(e) => setNome(e.target.value)}
           />
           <Label htmlFor='cardgame'>CardGame</Label>
+          <br />
           <DropdownMenu>
           <DropdownMenuTrigger>{cardgame || 'Selecione um CardGame'}</DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuLabel>CardGames</DropdownMenuLabel>
+            <DropdownMenuLabel>Escolha o Cardgame</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => setCardGame(CardGame.YuGiOh)}>Yu-Gi-Oh!</DropdownMenuItem>
             <DropdownMenuItem onClick={() => setCardGame(CardGame.Pokemon)}>Pokémon</DropdownMenuItem>
@@ -135,5 +133,3 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({ title, isOpen, onC
     </Dialog>
   )
 }
-
-{/*  */}

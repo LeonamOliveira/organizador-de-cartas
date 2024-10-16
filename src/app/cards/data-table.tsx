@@ -11,7 +11,7 @@ import {
     TableRow
 } from '@/components/ui/table'
 import { FaPen, FaTrashCan } from "react-icons/fa6";
-import { Card, CardGame } from './card.interface';
+import { Card, CardGame } from './interface/card.interface';
 import { DialogEdit, DialogConfirm, DialogCadastrar } from './dialog';
 
 export function DataTable() {
@@ -41,6 +41,7 @@ export function DataTable() {
 
     const handleCadastrarCard = (quantidade: number, nome: string, cardgame: CardGame) => {
         const newCard: Card = {
+            id: Date.now(),
             quantidade,
             nome, 
             cardgame
