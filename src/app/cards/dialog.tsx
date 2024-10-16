@@ -3,19 +3,27 @@ import {
   Dialog,
   DialogContent,
   DialogHeader,
-  DialogTitle,
-  DialogTrigger
+  DialogTitle
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { DialogEditProps } from './dialog.interface';
+import { IDialogConfirmEdit, IDialogEditProps, IDialogCadastrar } from './interface/dialog.interface';
 import { useState } from 'react';
-import { CardGame } from './card.interface';
+import { CardGame } from './interface/card.interface';
 
-export function DialogEdit({ title, isOpen, onClose, card, onSubmit}: DialogEditProps) {
-  const [quantidade, setQuantidade] = useState(card?.quantidade);
-  const [nome, setNome] = useState(card?.nome);
-  const [cardgame, setCardGame] = useState(card?.cardgame);
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+export function DialogEdit({ title, isOpen, onClose, card, onSubmit}: IDialogEditProps) {
+  const [quantidade, setQuantidade] = useState(card?.quantidade || 0);
+  const [nome, setNome] = useState(card?.nome || '');
+  const [cardgame, setCardGame] = useState(card?.cardgame || CardGame.YuGiOh);
 
   const handleSubmit = () => {
     onSubmit(quantidade, nome, cardgame);
@@ -43,11 +51,7 @@ export function DialogEdit({ title, isOpen, onClose, card, onSubmit}: DialogEdit
             onChange={(e) => setNome(e.target.value)}
           />
           <Label htmlFor='cardgame'>CardGame</Label>
-          <Input 
-            id='cardgame'
-            value={cardgame}
-            onChange={(e) => setCardGame(e.target.value as CardGame)}
-            />
+          <p>{cardgame}</p>
         </div>
         <Button style={{backgroundColor: 'green', color: 'white'}} onClick={handleSubmit}>Salvar</Button>
       </DialogContent>
@@ -55,15 +59,7 @@ export function DialogEdit({ title, isOpen, onClose, card, onSubmit}: DialogEdit
   )
 }
 
-interface DialogConfirmProps {
-  title: string;
-  isOpen: boolean;
-  onClose: () => void;
-  onConfirm: () => void;
-  children: React.ReactNode;
-}
-
-export const DialogConfirm: React.FC<DialogConfirmProps> = ({
+export const DialogConfirm: React.FC<IDialogConfirmEdit> = ({
   title,
   isOpen,
   onClose,
@@ -82,5 +78,58 @@ export const DialogConfirm: React.FC<DialogConfirmProps> = ({
         <Button onClick={onClose}>Cancelar</Button>
     </DialogContent>
   </Dialog>
+  )
+}
+
+export const DialogCadastrar: React.FC<IDialogCadastrar> = ({ title, isOpen, onClose, onSubmit}) => {
+  const [quantidade, setQuantidade] = useState(1);
+  const [nome, setNome] = useState('');
+  const [cardgame, setCardGame] = useState(CardGame.YuGiOh);
+
+  const handleSubmit = () => {
+    if(!nome || !cardgame) {
+      alert('Por favor, insira todos os campos!')
+      return;
+    }
+    onSubmit(quantidade, nome, cardgame);
+    onClose();
+  }
+
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className='sm:max-w-[425px]'>
+        <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+        </DialogHeader>
+        <div>
+          <Label htmlFor='quantidade'>Quantidade</Label>
+          <Input 
+            id='quantidade'
+            value={quantidade}
+            onChange={(e) => setQuantidade(Number(e.target.value))}
+            type='number'
+          />
+          <Label htmlFor='nome'>Nome</Label>
+          <Input 
+            id='nome'
+            value={nome}
+            onChange={(e) => setNome(e.target.value)}
+          />
+          <Label htmlFor='cardgame'>CardGame</Label>
+          <br />
+          <DropdownMenu>
+          <DropdownMenuTrigger>{cardgame || 'Selecione um CardGame'}</DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuLabel>Escolha o Cardgame</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => setCardGame(CardGame.YuGiOh)}>Yu-Gi-Oh!</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setCardGame(CardGame.Pokemon)}>Pokémon</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setCardGame(CardGame.OnePiece)}>One Piece</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+        <Button onClick={handleSubmit}>Cadastrar</Button>
+      </DialogContent>
+    </Dialog>
   )
 }
