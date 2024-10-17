@@ -1,4 +1,5 @@
 'use client'
+import { v4 as uuidv4 } from 'uuid';
 import React, { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import {
@@ -16,19 +17,19 @@ import { DialogEdit, DialogConfirm, DialogCadastrar } from './dialog';
 
 export function DataTable() {
     const [cards, setCards] = useState<Card[]>([{
-        id: 8,
+        id: uuidv4(),
         quantidade: 1,
         cardgame: CardGame.YuGiOh,
         nome: 'Mago Negro'
     }, 
     {
-        id: 7,
+        id: uuidv4(),
         quantidade: 3,
         cardgame: CardGame.Pokemon,
         nome: 'Pikachu'
     },
     {
-        id: 12,
+        id: uuidv4(),
         quantidade: 2,
         cardgame: CardGame.OnePiece,
         nome: 'Monkey D. Luffy'
@@ -41,7 +42,7 @@ export function DataTable() {
 
     const handleCadastrarCard = (quantidade: number, nome: string, cardgame: CardGame) => {
         const newCard: Card = {
-            id: Date.now(),
+            id: uuidv4(),
             quantidade,
             nome, 
             cardgame
@@ -50,7 +51,7 @@ export function DataTable() {
         setIsCadastrarDialogOpen(false)
     }
 
-    const handleEditCard = (cardId: number, newQuantity: number, newName: string, newCardgame: CardGame) => {
+    const handleEditCard = (cardId: string, newQuantity: number, newName: string, newCardgame: CardGame) => {
         console.log('Entrei')
         setCards(
             cards.map((card) => 
@@ -62,7 +63,7 @@ export function DataTable() {
         setIsDialogOpen(false);
     }
 
-    const handleDeleteCard = (cardId: number) => {
+    const handleDeleteCard = (cardId: string) => {
         setCards(cards.filter(card => card.id !== cardId))
         closeConfirmDialog()
     }

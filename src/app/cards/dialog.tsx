@@ -133,3 +133,9 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({ title, isOpen, onC
     </Dialog>
   )
 }
+
+// Adicionar pasta util
+// Adicionar variavel de ambiente em .ENV
+// Lucas Schlemper
+// Colocar husky fazendo lint e build
+// Instalar o Prettier
