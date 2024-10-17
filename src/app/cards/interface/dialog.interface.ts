@@ -7,20 +7,19 @@ export interface IDialogEditProps {
   card: {
     quantidade: number;
     nome: string;
-    cardgame: CardGame
+    cardgame: CardGame;
   };
   onSubmit: (quantidade: number, nome: string, cardgame: CardGame) => void;
   children?: React.ReactNode;
 }
 
 export interface IDialogCadastrar {
-  title: string,
-  isOpen: boolean,
+  title: string;
+  isOpen: boolean;
   onClose: () => void;
   onSubmit: (quantidade: number, nome: string, cardgame: CardGame) => void;
   children?: React.ReactNode;
 }
-
 
 export interface IDialogConfirmEdit {
   title: string;
