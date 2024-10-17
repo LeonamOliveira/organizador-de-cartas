@@ -12,6 +12,13 @@
   "lint-staged": {
     "**/*": "prettier --write --ignore-unknown"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run prettier-format && npm run lint",
+      "pre-push": "",
+      "...": "..."
+    }
+  },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
     "@radix-ui/react-dialog": "^1.1.1",
