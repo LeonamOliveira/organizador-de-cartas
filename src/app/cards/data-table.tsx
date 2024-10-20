@@ -124,9 +124,9 @@ export function DataTable() {
         <TableCaption>Lista de cartas</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[250px]">Quantidade</TableHead>
-            <TableHead>CardGame</TableHead>
             <TableHead>Nome</TableHead>
+            <TableHead>CardGame</TableHead>
+            <TableHead className="w-[250px]">Quantidade</TableHead>
             <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -134,9 +134,9 @@ export function DataTable() {
           {cards.length > 0 ? (
             cards.map((card) => (
               <TableRow key={card.id}>
-                <TableCell>{card.quantidade}</TableCell>
-                <TableCell>{card.cardgame}</TableCell>
                 <TableCell>{card.nome}</TableCell>
+                <TableCell>{card.cardgame}</TableCell>
+                <TableCell>{card.quantidade}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button
