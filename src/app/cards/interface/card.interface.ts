@@ -9,4 +9,6 @@ export interface Card {
   quantidade: number;
   nome: string;
   cardgame: CardGame;
+  qualidade: string;
+  edicao: string;
 }

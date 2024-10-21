@@ -34,9 +34,11 @@ export function DialogEdit({
   const [quantidade, setQuantidade] = useState(card?.quantidade || 0);
   const [nome, setNome] = useState(card?.nome || "");
   const [cardgame, setCardGame] = useState(card?.cardgame || CardGame.YuGiOh);
+  const [qualidade, setQualidade] = useState(card?.qualidade || "NM");
+  const [edicao, setEdicao] = useState(card?.edicao || "");
 
   const handleSubmit = () => {
-    onSubmit(quantidade, nome, cardgame);
+    onSubmit(quantidade, nome, cardgame, qualidade, edicao);
     onClose();
   };
 
@@ -62,6 +64,18 @@ export function DialogEdit({
           />
           <Label htmlFor="cardgame">CardGame</Label>
           <p>{cardgame}</p>
+          <Label htmlFor="edicao">Edição</Label>
+          <Input
+            id="edicao"
+            value={edicao}
+            onChange={(e) => setEdicao(e.target.value)}
+          />
+          <Label htmlFor="qualidade">Qualidade</Label>
+          <Input
+            id="qualidade"
+            value={qualidade}
+            onChange={(e) => setQualidade(e.target.value)}
+          />
         </div>
         <Button
           style={{ backgroundColor: "green", color: "white" }}
@@ -107,13 +121,15 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({
   const [quantidade, setQuantidade] = useState(1);
   const [nome, setNome] = useState("");
   const [cardgame, setCardGame] = useState(CardGame.YuGiOh);
+  const [qualidade, setQualidade] = useState("");
+  const [edicao, setEdicao] = useState("");
 
   const handleSubmit = () => {
     if (!nome || !cardgame) {
       alert("Por favor, insira todos os campos!");
       return;
     }
-    onSubmit(quantidade, nome, cardgame);
+    onSubmit(quantidade, nome, cardgame, qualidade, edicao);
     onClose();
   };
 
@@ -157,6 +173,19 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+          <br />
+          <Label>Qualidade</Label>
+          <Input
+            id="qualidade"
+            value={qualidade}
+            onChange={(e) => setQualidade(e.target.value)}
+          />
+          <Label>Edição</Label>
+          <Input
+            id="edicao"
+            value={edicao}
+            onChange={(e) => setEdicao(e.target.value)}
+          />
         </div>
         <Button onClick={handleSubmit}>Cadastrar</Button>
       </DialogContent>

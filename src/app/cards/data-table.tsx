@@ -21,18 +21,24 @@ export function DataTable() {
       quantidade: 1,
       cardgame: CardGame.YuGiOh,
       nome: "Mago Negro",
+      qualidade: "NM",
+      edicao: "MP21",
     },
     {
       id: 7,
       quantidade: 3,
       cardgame: CardGame.Pokemon,
       nome: "Pikachu",
+      qualidade: "M",
+      edicao: "MP23",
     },
     {
       id: 12,
       quantidade: 2,
       cardgame: CardGame.OnePiece,
       nome: "Monkey D. Luffy",
+      qualidade: "D",
+      edicao: "MAZE",
     },
   ]);
 
@@ -45,12 +51,16 @@ export function DataTable() {
     quantidade: number,
     nome: string,
     cardgame: CardGame,
+    qualidade: string,
+    edicao: string,
   ) => {
     const newCard: Card = {
       id: Date.now(),
       quantidade,
       nome,
       cardgame,
+      qualidade,
+      edicao,
     };
     setCards([...cards, { ...newCard }]);
     setIsCadastrarDialogOpen(false);
@@ -61,6 +71,8 @@ export function DataTable() {
     newQuantity: number,
     newName: string,
     newCardgame: CardGame,
+    newQualidade: string,
+    newEdicao: string,
   ) => {
     console.log("Entrei");
     setCards(
@@ -71,6 +83,8 @@ export function DataTable() {
               quantidade: newQuantity,
               nome: newName,
               cardgame: newCardgame,
+              qualidade: newQualidade,
+              edicao: newEdicao,
             }
           : card,
       ),
@@ -107,9 +121,18 @@ export function DataTable() {
     quantidade: number,
     nome: string,
     cardgame: CardGame,
+    qualidade: string,
+    edicao: string,
   ) => {
     if (selectedCard) {
-      handleEditCard(selectedCard.id, quantidade, nome, cardgame);
+      handleEditCard(
+        selectedCard.id,
+        quantidade,
+        nome,
+        cardgame,
+        qualidade,
+        edicao,
+      );
     }
   };
   return (
@@ -124,9 +147,11 @@ export function DataTable() {
         <TableCaption>Lista de cartas</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[250px]">Quantidade</TableHead>
             <TableHead>CardGame</TableHead>
             <TableHead>Nome</TableHead>
+            <TableHead>Edição</TableHead>
+            <TableHead>Qualidade</TableHead>
+            <TableHead className="w-[250px]">Quantidade</TableHead>
             <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -134,9 +159,11 @@ export function DataTable() {
           {cards.length > 0 ? (
             cards.map((card) => (
               <TableRow key={card.id}>
-                <TableCell>{card.quantidade}</TableCell>
                 <TableCell>{card.cardgame}</TableCell>
                 <TableCell>{card.nome}</TableCell>
+                <TableCell>{card.edicao}</TableCell>
+                <TableCell>{card.qualidade}</TableCell>
+                <TableCell>{card.quantidade}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button

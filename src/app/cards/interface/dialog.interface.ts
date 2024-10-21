@@ -8,8 +8,16 @@ export interface IDialogEditProps {
     quantidade: number;
     nome: string;
     cardgame: CardGame;
+    qualidade: string;
+    edicao: string;
   };
-  onSubmit: (quantidade: number, nome: string, cardgame: CardGame) => void;
+  onSubmit: (
+    quantidade: number,
+    nome: string,
+    cardgame: CardGame,
+    qualidade: string,
+    edicao: string,
+  ) => void;
   children?: React.ReactNode;
 }
 
@@ -17,7 +25,13 @@ export interface IDialogCadastrar {
   title: string;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (quantidade: number, nome: string, cardgame: CardGame) => void;
+  onSubmit: (
+    quantidade: number,
+    nome: string,
+    cardgame: CardGame,
+    qualidade: string,
+    edicao: string,
+  ) => void;
   children?: React.ReactNode;
 }
 
