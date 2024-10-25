@@ -1,7 +1,7 @@
-export enum CardGame{ 
-  Pokemon = 'Pokémon',
-  OnePiece = 'One Piece', 
-  YuGiOh = 'Yu-Gi-Oh!'
+export enum CardGame {
+  Pokemon = "Pokémon",
+  OnePiece = "One Piece",
+  YuGiOh = "Yu-Gi-Oh!",
 }
 
 export interface Card {
