@@ -5,7 +5,7 @@ export enum CardGame {
 }
 
 export interface Card {
-  id: number;
+  id: string;
   quantidade: number;
   nome: string;
   cardgame: CardGame;

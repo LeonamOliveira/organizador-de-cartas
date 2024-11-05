@@ -161,5 +161,6 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({
         <Button onClick={handleSubmit}>Cadastrar</Button>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
+

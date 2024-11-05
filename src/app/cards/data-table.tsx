@@ -1,6 +1,8 @@
-"use client";
-import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
+'use client'
+import { v4 as uuidv4 } from 'uuid';
+import React, { useState } from 'react'
+import { Button } from '@/components/ui/button'
+
 import {
   Table,
   TableBody,
@@ -15,73 +17,57 @@ import { Card, CardGame } from "./interface/card.interface";
 import { DialogEdit, DialogConfirm, DialogCadastrar } from "./dialog";
 
 export function DataTable() {
-  const [cards, setCards] = useState<Card[]>([
+    const [cards, setCards] = useState<Card[]>([{
+        id: uuidv4(),
+        quantidade: 1,
+        cardgame: CardGame.YuGiOh,
+        nome: 'Mago Negro'
+    }, 
     {
-      id: 8,
-      quantidade: 1,
-      cardgame: CardGame.YuGiOh,
-      nome: "Mago Negro",
+        id: uuidv4(),
+        quantidade: 3,
+        cardgame: CardGame.Pokemon,
+        nome: 'Pikachu'
     },
     {
-      id: 7,
-      quantidade: 3,
-      cardgame: CardGame.Pokemon,
-      nome: "Pikachu",
-    },
-    {
-      id: 12,
-      quantidade: 2,
-      cardgame: CardGame.OnePiece,
-      nome: "Monkey D. Luffy",
-    },
-  ]);
+        id: uuidv4(),
+        quantidade: 2,
+        cardgame: CardGame.OnePiece,
+        nome: 'Monkey D. Luffy'
+    }])
 
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [isCadastrarDialogOpen, setIsCadastrarDialogOpen] = useState(false);
 
-  const handleCadastrarCard = (
-    quantidade: number,
-    nome: string,
-    cardgame: CardGame,
-  ) => {
-    const newCard: Card = {
-      id: Date.now(),
-      quantidade,
-      nome,
-      cardgame,
-    };
-    setCards([...cards, { ...newCard }]);
-    setIsCadastrarDialogOpen(false);
-  };
+    const handleCadastrarCard = (quantidade: number, nome: string, cardgame: CardGame) => {
+        const newCard: Card = {
+            id: uuidv4(),
+            quantidade,
+            nome, 
+            cardgame
+        }
+        setCards([...cards, {...newCard}])
+        setIsCadastrarDialogOpen(false)
+    }
 
-  const handleEditCard = (
-    cardId: number,
-    newQuantity: number,
-    newName: string,
-    newCardgame: CardGame,
-  ) => {
-    console.log("Entrei");
-    setCards(
-      cards.map((card) =>
-        card.id === cardId
-          ? {
-              ...card,
-              quantidade: newQuantity,
-              nome: newName,
-              cardgame: newCardgame,
-            }
-          : card,
-      ),
-    );
-    setIsDialogOpen(false);
-  };
+    const handleEditCard = (cardId: string, newQuantity: number, newName: string, newCardgame: CardGame) => {
+        console.log('Entrei')
+        setCards(
+            cards.map((card) => 
+                card.id === cardId ? 
+                {...card, quantidade: newQuantity, nome: newName, cardgame: newCardgame} 
+                : card
+            )
+        )
+        setIsDialogOpen(false);
+    }
 
-  const handleDeleteCard = (cardId: number) => {
-    setCards(cards.filter((card) => card.id !== cardId));
-    closeConfirmDialog();
-  };
+    const handleDeleteCard = (cardId: string) => {
+        setCards(cards.filter(card => card.id !== cardId))
+        closeConfirmDialog()
+    }
 
   const openEditDialog = (card: Card) => {
     setSelectedCard(card);
