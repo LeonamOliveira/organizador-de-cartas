@@ -1,4 +1,4 @@
-import { DataTable } from "./data-table";
+import { DataTable } from "./cards/data-table";
 
 export default async function DemoPage() {
   return (
