@@ -1,5 +1,9 @@
-export default function Home() {
+import { DataTable } from "./cards/data-table";
+
+export default async function DemoPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24"></main>
+    <div className="container mx-auto py-10">
+      <DataTable />
+    </div>
   );
 }

@@ -14,7 +14,6 @@ import {
 } from "./interface/dialog.interface";
 import { useState } from "react";
 import { CardGame } from "./interface/card.interface";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,9 +33,11 @@ export function DialogEdit({
   const [quantidade, setQuantidade] = useState(card?.quantidade || 0);
   const [nome, setNome] = useState(card?.nome || "");
   const [cardgame, setCardGame] = useState(card?.cardgame || CardGame.YuGiOh);
+  const [qualidade, setQualidade] = useState(card?.qualidade || "NM");
+  const [edicao, setEdicao] = useState(card?.edicao || "");
 
   const handleSubmit = () => {
-    onSubmit(quantidade, nome, cardgame);
+    onSubmit(quantidade, nome, cardgame, qualidade, edicao);
     onClose();
   };
 
@@ -46,27 +47,46 @@ export function DialogEdit({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div>
-          <Label htmlFor="quantidade">Quantidade</Label>
-          <Input
-            id="quantidade"
-            value={quantidade}
-            onChange={(e) => setQuantidade(Number(e.target.value))}
-            type="number"
-          />
-          <Label htmlFor="nome">Nome</Label>
-          <Input
-            id="nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          />
-          <Label htmlFor="cardgame">CardGame</Label>
-          <p>{cardgame}</p>
+        <div className="grid gap-4">
+          <div>
+            <Label htmlFor="nome">Nome</Label>
+            <Input
+              id="nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="cardgame">CardGame</Label>
+            <p>{cardgame}</p>
+          </div>
+          <div>
+            <Label htmlFor="edicao">Edição</Label>
+            <Input
+              id="edicao"
+              value={edicao}
+              onChange={(e) => setEdicao(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="quantidade">Quantidade</Label>
+            <Input
+              id="quantidade"
+              value={quantidade}
+              onChange={(e) => setQuantidade(Number(e.target.value))}
+              type="number"
+            />
+          </div>
+          <div>
+            <Label htmlFor="qualidade">Qualidade</Label>
+            <Input
+              id="qualidade"
+              value={qualidade}
+              onChange={(e) => setQualidade(e.target.value)}
+            />
+          </div>
         </div>
-        <Button
-          style={{ backgroundColor: "green", color: "white" }}
-          onClick={handleSubmit}
-        >
+        <Button className="mt-4 bg-green-600 text-white" onClick={handleSubmit}>
           Salvar
         </Button>
       </DialogContent>
@@ -89,10 +109,15 @@ export const DialogConfirm: React.FC<IDialogConfirmEdit> = ({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <Button variant="destructive" onClick={onConfirm}>
-          Excluir
-        </Button>
-        <Button onClick={onClose}>Cancelar</Button>
+        <div className="flex flex-col gap-4">
+          {children}
+          <div className="flex justify-end gap-4">
+            <Button variant="destructive" onClick={onConfirm}>
+              Excluir
+            </Button>
+            <Button onClick={onClose}>Cancelar</Button>
+          </div>
+        </div>
       </DialogContent>
     </Dialog>
   );
@@ -107,13 +132,15 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({
   const [quantidade, setQuantidade] = useState(1);
   const [nome, setNome] = useState("");
   const [cardgame, setCardGame] = useState(CardGame.YuGiOh);
+  const [qualidade, setQualidade] = useState("");
+  const [edicao, setEdicao] = useState("");
 
   const handleSubmit = () => {
     if (!nome || !cardgame) {
-      alert("Por favor, insira todos os campos!");
+      alert("Por favor, insira todos os campos!"); // https://ui.shadcn.com/docs/components/alert
       return;
     }
-    onSubmit(quantidade, nome, cardgame);
+    onSubmit(quantidade, nome, cardgame, qualidade, edicao);
     onClose();
   };
 
@@ -123,44 +150,74 @@ export const DialogCadastrar: React.FC<IDialogCadastrar> = ({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
         </DialogHeader>
-        <div>
-          <Label htmlFor="quantidade">Quantidade</Label>
-          <Input
-            id="quantidade"
-            value={quantidade}
-            onChange={(e) => setQuantidade(Number(e.target.value))}
-            type="number"
-          />
-          <Label htmlFor="nome">Nome</Label>
-          <Input
-            id="nome"
-            value={nome}
-            onChange={(e) => setNome(e.target.value)}
-          />
-          <Label htmlFor="cardgame">CardGame</Label>
-          <br />
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              {cardgame || "Selecione um CardGame"}
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel>Escolha o Cardgame</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => setCardGame(CardGame.YuGiOh)}>
-                Yu-Gi-Oh!
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setCardGame(CardGame.Pokemon)}>
-                Pokémon
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setCardGame(CardGame.OnePiece)}>
-                One Piece
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="grid gap-4">
+          <div>
+            <Label htmlFor="nome">Nome</Label>
+            <Input
+              id="nome"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="cardgame">CardGame</Label>
+            <div className="border rounded-md p-2">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="w-full text-left">
+                  {cardgame || "Selecione um CardGame"}
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuLabel>Escolha o Cardgame</DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
+                    onClick={() => setCardGame(CardGame.YuGiOh)}
+                  >
+                    Yu-Gi-Oh!
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setCardGame(CardGame.Pokemon)}
+                  >
+                    Pokémon
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => setCardGame(CardGame.OnePiece)}
+                  >
+                    One Piece
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          </div>
+          <div>
+            <Label>Edição</Label>
+            <Input
+              id="edicao"
+              value={edicao}
+              onChange={(e) => setEdicao(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label>Qualidade</Label>
+            <Input
+              id="qualidade"
+              value={qualidade}
+              onChange={(e) => setQualidade(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="quantidade">Quantidade</Label>
+            <Input
+              id="quantidade"
+              value={quantidade}
+              onChange={(e) => setQuantidade(Number(e.target.value))}
+              type="number"
+            />
+          </div>
         </div>
-        <Button onClick={handleSubmit}>Cadastrar</Button>
+        <Button className="mt-4 bg-blue-600 text-white" onClick={handleSubmit}>
+          Cadastrar
+        </Button>
       </DialogContent>
     </Dialog>
-  )
-}
-
+  );
+};
