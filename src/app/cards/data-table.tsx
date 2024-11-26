@@ -1,8 +1,8 @@
 "use client";
+
 import { v4 as uuidv4 } from "uuid";
 import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-
 import {
   Table,
   TableBody,
@@ -18,98 +18,89 @@ import { DialogEdit, DialogConfirm, DialogCadastrar } from "./dialog";
 
 export function DataTable() {
   const [cards, setCards] = useState<Card[]>([]);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState<Card | null>(null);
-  const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [isCadastrarDialogOpen, setIsCadastrarDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
 
   useEffect(() => {
-    const storedCards = localStorage.getItem("cards");
-    if (storedCards) {
-      setCards(JSON.parse(storedCards));
+    if (typeof window !== "undefined") {
+      const storedCards = localStorage.getItem("cards");
+      if (storedCards) {
+        try {
+          setCards(JSON.parse(storedCards));
+        } catch (err) {
+          console.error("Erro ao carregar dados do localStorage:", err);
+        }
+      }
     }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("cards", JSON.stringify(cards));
+    if (cards.length > 0) {
+      localStorage.setItem("cards", JSON.stringify(cards));
+    }
   }, [cards]);
 
-  const handleCadastrarCard = (
+  const handleAddCard = (
     quantidade: number,
     nome: string,
     cardgame: CardGame,
+    qualidade: string,
+    edicao: string,
   ) => {
     const newCard: Card = {
       id: uuidv4(),
       quantidade,
       nome,
       cardgame,
+      qualidade,
+      edicao,
     };
-    setCards([...cards, newCard]);
-    setIsCadastrarDialogOpen(false);
+    setCards((prevCards) => [...prevCards, newCard]);
+    setIsAddDialogOpen(false);
   };
 
   const handleEditCard = (
     cardId: string,
-    newQuantity: number,
-    newName: string,
-    newCardgame: CardGame,
+    quantidade: number,
+    nome: string,
+    cardgame: CardGame,
+    qualidade: string,
+    edicao: string,
   ) => {
-    setCards(
-      cards.map((card) =>
+    setCards((prevCards) =>
+      prevCards.map((card) =>
         card.id === cardId
-          ? {
-              ...card,
-              quantidade: newQuantity,
-              nome: newName,
-              cardgame: newCardgame,
-            }
+          ? { ...card, quantidade, nome, cardgame, qualidade, edicao }
           : card,
       ),
     );
-    setIsDialogOpen(false);
+    setIsEditDialogOpen(false);
+    setSelectedCard(null);
   };
 
   const handleDeleteCard = (cardId: string) => {
-    setCards(cards.filter((card) => card.id !== cardId));
-    closeConfirmDialog();
+    setCards((prevCards) => prevCards.filter((card) => card.id !== cardId));
+    setIsDeleteDialogOpen(false);
+    setSelectedCard(null);
   };
 
   const openEditDialog = (card: Card) => {
     setSelectedCard(card);
-    setIsDialogOpen(true);
+    setIsEditDialogOpen(true);
   };
 
-  const closeDialog = () => {
-    setIsDialogOpen(false);
-    setSelectedCard(null);
-  };
-
-  const openConfirmDialog = (card: Card) => {
+  const openDeleteDialog = (card: Card) => {
     setSelectedCard(card);
-    setIsConfirmDialogOpen(true);
-  };
-
-  const closeConfirmDialog = () => {
-    setIsConfirmDialogOpen(false);
-    setSelectedCard(null);
-  };
-
-  const handleDialogSubmit = (
-    quantidade: number,
-    nome: string,
-    cardgame: CardGame,
-  ) => {
-    if (selectedCard) {
-      handleEditCard(selectedCard.id, quantidade, nome, cardgame);
-    }
+    setIsDeleteDialogOpen(true);
   };
 
   return (
     <>
       <Button
         style={{ backgroundColor: "green", color: "white" }}
-        onClick={() => setIsCadastrarDialogOpen(true)}
+        onClick={() => setIsAddDialogOpen(true)}
       >
         Cadastrar
       </Button>
@@ -117,9 +108,11 @@ export function DataTable() {
         <TableCaption>Lista de cartas</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[250px]">Quantidade</TableHead>
-            <TableHead>CardGame</TableHead>
             <TableHead>Nome</TableHead>
+            <TableHead>CardGame</TableHead>
+            <TableHead>Edição</TableHead>
+            <TableHead>Qualidade</TableHead>
+            <TableHead>Quantidade</TableHead>
             <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
@@ -127,9 +120,11 @@ export function DataTable() {
           {cards.length > 0 ? (
             cards.map((card) => (
               <TableRow key={card.id}>
-                <TableCell>{card.quantidade}</TableCell>
-                <TableCell>{card.cardgame}</TableCell>
                 <TableCell>{card.nome}</TableCell>
+                <TableCell>{card.cardgame}</TableCell>
+                <TableCell>{card.edicao}</TableCell>
+                <TableCell>{card.qualidade}</TableCell>
+                <TableCell>{card.quantidade}</TableCell>
                 <TableCell>
                   <div className="flex items-center gap-2">
                     <Button
@@ -142,7 +137,7 @@ export function DataTable() {
                     <Button
                       variant="ghost"
                       size="icon"
-                      onClick={() => openConfirmDialog(card)}
+                      onClick={() => openDeleteDialog(card)}
                     >
                       <FaTrashCan />
                     </Button>
@@ -152,41 +147,61 @@ export function DataTable() {
             ))
           ) : (
             <TableRow>
-              <TableCell colSpan={4} className="text-center">
-                Não encontrado
+              <TableCell colSpan={6} className="text-center">
+                Nenhum card cadastrado
               </TableCell>
             </TableRow>
           )}
         </TableBody>
       </Table>
-      {selectedCard && (
+
+      {selectedCard && isEditDialogOpen && (
         <DialogEdit
           title="Editar Carta"
-          isOpen={isDialogOpen}
-          onClose={closeDialog}
+          isOpen={isEditDialogOpen}
+          onClose={() => {
+            setIsEditDialogOpen(false);
+            setSelectedCard(null);
+          }}
           card={selectedCard}
-          onSubmit={handleDialogSubmit}
+          onSubmit={(quantidade, nome, cardgame, qualidade, edicao) =>
+            handleEditCard(
+              selectedCard.id,
+              quantidade,
+              nome,
+              cardgame,
+              qualidade,
+              edicao,
+            )
+          }
         />
       )}
-      {selectedCard && (
+
+      {selectedCard && isDeleteDialogOpen && (
         <DialogConfirm
           title="Excluir Carta"
-          isOpen={isConfirmDialogOpen}
-          onClose={closeConfirmDialog}
+          isOpen={isDeleteDialogOpen}
+          onClose={() => {
+            setIsDeleteDialogOpen(false);
+            setSelectedCard(null);
+          }}
           onConfirm={() => handleDeleteCard(selectedCard.id)}
         >
           <p>
-            Deseja excluir a carta {selectedCard.nome} com quantidade{" "}
-            {selectedCard.quantidade}?
+            Tem certeza que deseja excluir a carta {selectedCard.nome} com
+            quantidade {selectedCard.quantidade}?
           </p>
         </DialogConfirm>
       )}
-      <DialogCadastrar
-        title="Cadastrar Carta"
-        isOpen={isCadastrarDialogOpen}
-        onClose={() => setIsCadastrarDialogOpen(false)}
-        onSubmit={handleCadastrarCard}
-      />
+
+      {isAddDialogOpen && (
+        <DialogCadastrar
+          title="Cadastrar Carta"
+          isOpen={isAddDialogOpen}
+          onClose={() => setIsAddDialogOpen(false)}
+          onSubmit={handleAddCard}
+        />
+      )}
     </>
   );
 }
