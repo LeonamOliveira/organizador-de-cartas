@@ -49,15 +49,6 @@ export function DialogEdit({
         </DialogHeader>
         <div className="grid gap-4">
           <div>
-            <Label htmlFor="quantidade">Quantidade</Label>
-            <Input
-              id="quantidade"
-              value={quantidade}
-              onChange={(e) => setQuantidade(Number(e.target.value))}
-              type="number"
-            />
-          </div>
-          <div>
             <Label htmlFor="nome">Nome</Label>
             <Input
               id="nome"
@@ -75,6 +66,15 @@ export function DialogEdit({
               id="edicao"
               value={edicao}
               onChange={(e) => setEdicao(e.target.value)}
+            />
+          </div>
+          <div>
+            <Label htmlFor="quantidade">Quantidade</Label>
+            <Input
+              id="quantidade"
+              value={quantidade}
+              onChange={(e) => setQuantidade(Number(e.target.value))}
+              type="number"
             />
           </div>
           <div>
